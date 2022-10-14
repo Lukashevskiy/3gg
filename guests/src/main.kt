@@ -1,6 +1,6 @@
 import java.util.*
 
-fun isValidNeighbours(y: Int, x: Int, yn:Int, xn: Int) : Boolean{
+fun isValidNeighbours(y: Int, x: Int, yn: Int, xn: Int) : Boolean{
     return y in 0 until yn && x in 0 until xn
 }
 

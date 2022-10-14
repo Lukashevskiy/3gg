@@ -6,6 +6,7 @@ fun printEvent(r: Robot, event:String){
 
 fun smartRotation(r: Robot, to: Direction): Robot{
     while (r.getDirection() != to){
+        //println("$to, ${r.getDirection()}")
         val rr = r.turnLeft()
         printEvent(r, rr)
     }
@@ -26,13 +27,13 @@ fun move(r: Robot, toX: Int, toY: Int): Robot{
             }
         }else{
             if( movingRobot.getY() > toY ){
-                Direction.UP
-            }else{
                 Direction.DOWN
+            }else{
+                Direction.UP
             }
         }
         movingRobot = smartRotation(r, currentDirection)
-        movingRobot.stepForward()
+        printEvent(r, movingRobot.stepForward())
     }
 
     return movingRobot
@@ -41,9 +42,6 @@ fun move(r: Robot, toX: Int, toY: Int): Robot{
 
 fun main() {
     val r = Robot(0, 0, Direction.DOWN)
-    //move(r, 10, 10)
-    for(direc in Direction.values()){
-        val event = r.turnLeft()
-        printEvent(r, event)
-    }
+    move(r, 10, 10)
+    //print("event: ${r.turnLeft()} \n\t Robot state: $r")
 }

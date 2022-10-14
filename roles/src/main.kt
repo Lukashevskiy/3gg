@@ -1,50 +1,50 @@
-import java.io.File
-import java.util.*
-import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
+import kotlin.math.max
+import kotlin.math.min
 
-fun main(){
-    val file = File("/home/dmitriy/Downloads/roles.txt")
-    val text = file.readText()
-    //var roles = ArrayList<String>()
+enum class Direction(val d: Int) {
+    UP(1), RIGHT(2), DOWN(3), LEFT(4)
+}
 
-    val play = mutableMapOf<String, String>()
-    val a = Pattern.compile("\\w+\\w:").split(text).toList()
-    //print(a[1])
-    a[1].trim().split("\n").forEach{ role ->
-        println(role)
-        println("${role.toString()} -> 0")
+fun getDirection(d: Int): Direction{
+    return when (d) {
+        1 -> return Direction.UP
+        2 -> return Direction.RIGHT
+        3 -> return Direction.LEFT
+        4 -> return Direction.DOWN
 
-        play[role] = ""
+        else -> Direction.UP
     }
-    //println(play.keys)
-////    play.forEach{ (key, value) ->
-////        println("$key ---> $value")
-////    }
-//    var previewsName = ""
-//    println(Pattern.compile("\\w+\\w:").split(text)[2])
-//    val textLines = Pattern.compile("\\w+\\w:").split(text)[2].split('\n').forEachIndexed{
-//            index, textLine ->
-//            textLine.split(':').forEach { print(it) }
-//            val t = textLine.split(':')
-//            //println(t)
-//            var currentString = ""
-//            if(t.size == 2){
-//                if(play.containsKey(t[0])){
-//                    previewsName = t[0]
-//                    currentString = t[1]
-//                }else{
-//                    currentString = textLine
-//                }
-//            }else{
-//                currentString = textLine
-//            }
-//
-//
-//            play[previewsName] += "$index) $currentString \n"
+}
+
+fun newDirection(old: Direction, new: Direction): Direction{
+    val sum = old.d + new.d
+    return when(new){
+        Direction.LEFT -> getDirection(4 - sum - 1)
+        Direction.RIGHT -> getDirection(sum - 1)
+        else -> old
+    }
+}
+fun process(n:Int,m:Int){
+    val mN = max(n,m)
+    val mM = min(n,m)
+    
+}
+
+fun main() {
+//    File("").forEachLine{ line ->
+//        val regex = "(\\d+)\\s+(\\d+)\\s+(\\d+)".toRegex()
+//        val match = regex.find(line)
+//        if (match != null){
+//            val (nS, mS, kS) = match.destructured
+//        }
 //    }
-//
-//    //println(play)
+    val arr = arrayListOf<Direction>(Direction.UP, Direction.RIGHT, Direction.LEFT, Direction.DOWN)
+    for (ar1 in arr){
+        for(ar2 in arr) {
+            println("$ar1 $ar2, ${newDirection(ar1,ar2)}")
+        }
+    }
+//    val smartRobot: SmartRobot = SmartRobot(0,0, Direction.DOWN)
+//    smartRobot.moveRobot(-10, 10)
 }

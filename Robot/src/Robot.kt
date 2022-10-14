@@ -7,7 +7,7 @@ fun getByValue(value: Int): Direction{
         1 -> Direction.UP
         2 -> Direction.LEFT
         3 -> Direction.DOWN
-        0 -> Direction.UP
+        0 -> Direction.RIGHT
         else -> Direction.DOWN
     }
 }
@@ -25,7 +25,7 @@ class Robot(private var x: Int, private var y: Int, private var direction: Direc
     }
 
     fun turnLeft(): String{
-        direction = getByValue(direction.dir + 1 % 4)
+        direction = getByValue((direction.dir + 1) % Direction.values().size)
         return "Turn Left"
     }
 
