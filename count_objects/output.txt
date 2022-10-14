@@ -1,0 +1,3 @@
+number of figures on image: 500
+number of rectangles on image: 92
+number of other objects on image: 408
