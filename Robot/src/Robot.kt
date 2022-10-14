@@ -14,21 +14,24 @@ fun getByValue(value: Int): Direction{
 
 
 class Robot(private var x: Int, private var y: Int, private var direction: Direction) {
-    fun stepForward() {
+    fun stepForward(): String {
         when (direction) {
             Direction.RIGHT -> x++
             Direction.LEFT -> x--
             Direction.UP -> y++
             Direction.DOWN -> y--
         }
+        return "Step Forward"
     }
 
-    fun turnLeft(){
+    fun turnLeft(): String{
         direction = getByValue(direction.dir + 1 % 4)
+        return "Turn Left"
     }
 
-    fun turnRight(){
+    fun turnRight(): String{
         direction = getByValue(direction.dir - 1)
+        return "Turn Right"
     }
 
     fun getDirection(): Direction{
