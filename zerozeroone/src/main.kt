@@ -79,8 +79,8 @@ fun printAllField(b:Array<CharArray>, n:Int){
 fun printSmallField(b: Array<CharArray>, n:Int, x:Int, y:Int){
     for (i in 0 until n){
         for (j in 0 until n){
-            val cx = (x - 1) * n + j
-            val cy = (y - 1) * n + j
+            val cx = x * n + j
+            val cy = y * n + i
             print(b[cy][cx])
             if( j < n - 1){
                 print(Border.RIGHT)
@@ -109,58 +109,93 @@ fun checkField(b: Array<CharArray>, n: Int, x: Int, y: Int) : Int {
     return -1
 }
 
-fun isEnd(): Boolean{
-    return false
+fun checkLine(slice:CharArray): Int {
+    var countX = 0
+    var countY = 0
+    for(el in slice){
+        when (el){
+            Elements.X.ch -> countX++;
+            Elements.O.ch -> countY++;
+        }
+    }
+
+    return if(countX == slice.size){
+        1
+    }else if(countY == slice.size){
+        0
+    }else{
+        -1
+    }
+
 }
 
+fun checkSubfield(b: Array<CharArray>, y:Int, x: Int, yn:Int, xn:Int): Int{
+    val cx = x * xn
+    val cy = y * yn
+    for (i in cx until cx+xn){
+        val check = checkLine(b[i].slice(cy until cy+yn).toCharArray())
+        if(check != -1){
+            return check
+        }
+    }
+    for (i in cx until cx+xn){
+        val check = checkLine(b.slice(cy until cy+yn).toTypedArray()[cx])
+        if(check != -1){
+            return check
+        }
+    }
+
+}
+
+
 fun main() {
-    val n = 2
+    val n = 3
     val b = Array(n * n ){ CharArray(n * n ){ Elements.EMPTY.ch } }
+    printAllField(b, n)
+    var next = false
+    var isEnd = -1
     val player1 = Elements.X
-    val queue1:Queue<Pair<Int,Int>> = LinkedList()
+    val queue1: Queue<Pair<Int, Int>> = LinkedList()
 
     val player2 = Elements.O
-    val queue2:Queue<Pair<Int,Int>> = LinkedList()
+    val queue2: Queue<Pair<Int, Int>> = LinkedList()
 
-    var next = true
-    while (!isEnd()){
+    while (isEnd == -1){
         if(next){
             println("now Move X")
             if(queue1.isEmpty()){
                 printAllField(b, n)
                 println("insert x, y of subfield for enemy")
-                val (x, y) = readLine()!!.split(' ').map{ it.toInt() }
-                queue2.add(Pair(x,y))
+                val (y, x) = readLine()!!.split(' ').map{ it.toInt() }
+                queue2.add(Pair(x-1,y-1))
                 next = !next
             }else{
-                var (cx, cy) = queue1.poll()
+                val (cx, cy) = queue1.poll()
                 printSmallField(b, n, cx, cy)
                 println("insert x, y of subfield to insert your symbol")
-                var (x, y) = readLine()!!.split(' ').map{ it.toInt() }
-                x--
-                y--
-                cx--
-                cy--
-                b[cy + y * n][cx + x * n] = player1.ch
+                val (y, x) = readLine()!!.split(' ').map{ it.toInt() }
+                val currentCx = cx * n + x - 1
+                val currentCy = cy * n + y - 1
+                b[currentCy][currentCx] = player1.ch
+                isEnd = checkSubfield(b, cy, cx, n, n)
             }
         }else{
             println("now Move O")
             if(queue2.isEmpty()){
                 printAllField(b, n)
                 println("insert x, y of subfield for enemy")
-                var (x, y) = readLine()!!.split(' ').map{ it.toInt() }
-                queue1.add(Pair(x,y))
+                val (y, x) = readLine()!!.split(' ').map{ it.toInt() }
+                queue1.add(Pair(x-1,y-1))
                 next = !next
             }else{
-                var (cx, cy) = queue2.poll()
+                val (cx, cy) = queue2.poll()
                 printSmallField(b, n, cx, cy)
                 println("insert x, y of subfield to insert your symbol")
-                var (x, y) = readLine()!!.split(' ').map{ it.toInt() }
-                x--
-                y--
-                cx--
-                cy--
-                b[cy + y * n][cx + x * n] = player2.ch
+                val (y, x) = readLine()!!.split(' ').map{ it.toInt() }
+                val currentCx = cx * n + x - 1
+                val currentCy = cy * n + y - 1
+                b[currentCy][currentCx] = player2.ch
+                isEnd = checkSubfield(b, cy, cx, n, n)
             }
         }
 
